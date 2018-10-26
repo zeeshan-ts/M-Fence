@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:id="@+id/mi_clear_fence"
+        android:icon="@drawable/ic_delete_sweep_grayish_yellow_24dp"
+        android:title="@string/clear_fence"
+        app:showAsAction="ifRoom"/>
+
+    <item
+        android:id="@+id/mi_add_fence"
+        android:icon="@drawable/ic_add_circle_outline_grayish_yellow_24dp"
+        android:title="@string/add_fence"
+        app:showAsAction="ifRoom"/>
+
+</menu>
