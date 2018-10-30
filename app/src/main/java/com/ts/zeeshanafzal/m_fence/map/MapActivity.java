@@ -6,6 +6,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.content.IntentSender;
 import android.content.pm.PackageManager;
+import android.graphics.Camera;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
@@ -31,9 +32,15 @@ import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.location.LocationSettingsRequest;
 import com.google.android.gms.location.LocationSettingsResponse;
 import com.google.android.gms.location.LocationSettingsStatusCodes;
+import com.google.android.gms.maps.CameraUpdate;
+import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
+import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
@@ -60,7 +67,9 @@ public class MapActivity extends AppCompatActivity implements MapListener,
     private LocationRequest locationRequest;
     private LocationCallback locationCallback;
     private LocationSettingsRequest locationSettingsRequest;
-
+    private Marker currPosMarker = null;
+    private Marker geoFenceMarker = null;
+    private GoogleMap googleMap;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -191,6 +200,18 @@ public class MapActivity extends AppCompatActivity implements MapListener,
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mapPresenter.onMapReady(googleMap);
+        this.googleMap = googleMap;
+
+        setMapListeners(this.googleMap);
+    }
+
+    private void setMapListeners(GoogleMap googleMap) {
+        googleMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
+            @Override
+            public void onMapClick(LatLng latLng) {
+                mapPresenter.onMapClicked(latLng);
+            }
+        });
     }
 
 
@@ -214,5 +235,36 @@ public class MapActivity extends AppCompatActivity implements MapListener,
     @Override
     public void stopLocationUpdates() {
         locationClient.removeLocationUpdates(locationCallback);
+    }
+
+    @Override
+    public void showMarkerAt(Location location) {
+        if (currPosMarker == null) {
+            MarkerOptions ops=new MarkerOptions();
+            ops.position(new LatLng(location.getLatitude(), location.getLongitude()));
+            currPosMarker = googleMap.addMarker(ops);
+            currPosMarker.setTitle("Current Position");
+        } else {
+            currPosMarker.setPosition(new LatLng(location.getLatitude(), location.getLongitude()));
+        }
+    }
+
+    @Override
+    public void moveCameraTo(Location location) {
+        googleMap.moveCamera(CameraUpdateFactory.newLatLng(new LatLng(location.getLatitude(), location.getLongitude())));
+        googleMap.animateCamera(CameraUpdateFactory.zoomTo(4f));
+    }
+
+    @Override
+    public void showGeoFenceMarkerAt(LatLng latLng) {
+        if (geoFenceMarker == null) {
+            MarkerOptions ops = new MarkerOptions();
+            ops.position(latLng);
+            ops.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_MAGENTA));
+            geoFenceMarker = googleMap.addMarker(ops);
+            geoFenceMarker.setTitle("Center of Geo Fence");
+        } else {
+            geoFenceMarker.setPosition(latLng);
+        }
     }
 }

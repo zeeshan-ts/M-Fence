@@ -3,6 +3,9 @@ package com.ts.zeeshanafzal.m_fence.map;
 import android.location.Location;
 
 import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.model.LatLng;
+
+import java.nio.file.attribute.AclEntryFlag;
 
 public class MapPresenter {
     MapListener mapListener;
@@ -32,6 +35,8 @@ public class MapPresenter {
         this.currLocation = currLocation;
 
         mapListener.setTVLocation(currLocation.getLatitude(), currLocation.getLongitude());
+        mapListener.showMarkerAt(currLocation);
+//        mapListener.moveCameraTo(currLocation);
     }
 
     public void onStart() {
@@ -40,5 +45,9 @@ public class MapPresenter {
 
     public void onStop() {
         mapListener.stopLocationUpdates();
+    }
+
+    public void onMapClicked(LatLng latLng) {
+        mapListener.showGeoFenceMarkerAt(latLng);
     }
 }
