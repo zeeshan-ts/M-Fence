@@ -13,7 +13,17 @@ interface MapListener {
 
     void showMarkerAt(Location location);
 
-    void moveCameraTo(Location location);
+    void moveCameraTo(LatLng latLng);
 
     void showGeoFenceMarkerAt(LatLng latLng);
+
+    void addGeoFence(LatLng geoFenceLatLng);
+
+    void showSnackbar(String msg);
+
+    void addCircleAt(LatLng latLng);
+
+    void clearFences();
+
+    void zoomCamera(float v);
 }
