@@ -4,6 +4,7 @@ import android.location.Location;
 
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
 
 public class MapPresenter {
     MapListener mapListener;
@@ -19,9 +20,9 @@ public class MapPresenter {
         this.map = googleMap;
     }
 
-    public void onAddFenceClicked() {
-        if (geoFenceLatLng != null) {
-            mapListener.addGeoFence(geoFenceLatLng);
+    public void onAddFenceClicked(Marker geoFenceMarker) {
+        if (geoFenceMarker != null) {
+            mapListener.addGeoFence(geoFenceMarker.getPosition());
         } else {
             mapListener.showSnackbar("Please add geo fence marker first by tapping on map");
         }
@@ -30,12 +31,20 @@ public class MapPresenter {
     public void onClearFenceClicked() {
         geoFenceLatLng = null;
         mapListener.clearFences();
+        if (currLocation != null) {
+            mapListener.moveCameraTo(new LatLng(currLocation.getLatitude(), currLocation.getLongitude()));
+        }
+
         mapListener.zoomCamera(0);
     }
 
     public void onLocationChanged(Location currLocation) {
         if (currLocation == null)
             return;
+
+        if (this.currLocation == null) {
+            mapListener.moveCameraTo(new LatLng(currLocation.getLatitude(), currLocation.getLongitude()));
+        }
 
         this.currLocation = currLocation;
 
@@ -54,7 +63,6 @@ public class MapPresenter {
 
     public void onMapClicked(LatLng latLng) {
         if (geoFenceLatLng == null) {
-            this.geoFenceLatLng = latLng;
             mapListener.showGeoFenceMarkerAt(latLng);
         }else {
             mapListener.showSnackbar("Clear fence to change position");
@@ -62,6 +70,7 @@ public class MapPresenter {
     }
 
     public void onFenceAdded(LatLng latLng) {
+        geoFenceLatLng = latLng;
         mapListener.addCircleAt(latLng);
         mapListener.moveCameraTo(latLng);
         mapListener.zoomCamera(14f);

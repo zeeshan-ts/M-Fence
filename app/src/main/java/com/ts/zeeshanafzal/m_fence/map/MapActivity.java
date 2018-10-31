@@ -201,7 +201,7 @@ public class MapActivity extends AppCompatActivity implements MapListener,
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.mi_add_fence:
-                mapPresenter.onAddFenceClicked();
+                mapPresenter.onAddFenceClicked(geoFenceMarker);
                 break;
             case R.id.mi_clear_fence:
                 mapPresenter.onClearFenceClicked();
