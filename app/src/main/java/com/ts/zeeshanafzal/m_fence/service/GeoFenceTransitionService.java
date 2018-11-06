@@ -6,7 +6,9 @@ import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Intent;
 import android.content.Context;
+import android.graphics.BitmapFactory;
 import android.os.Build;
+import android.support.v4.content.ContextCompat;
 import android.util.Log;
 
 import com.google.android.gms.location.Geofence;
@@ -60,6 +62,8 @@ public class GeoFenceTransitionService extends IntentService {
                 .setContentTitle("M-Fence")
                 .setSmallIcon(R.drawable.ic_location_on_white_18dp)
 //                .setContentIntent(pi)
+//                .setLargeIcon(BitmapFactory.decodeResource(getResources(),R.drawable.ic_location_on_purple_900_24dp))
+                .setColor(ContextCompat.getColor(this,R.color.colorPrimary))
                 .build();
 
         NotificationManager notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);

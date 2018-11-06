@@ -49,7 +49,7 @@ public class MapPresenter {
         this.currLocation = currLocation;
 
         mapListener.setTVLocation(currLocation.getLatitude(), currLocation.getLongitude());
-        mapListener.showMarkerAt(currLocation);
+//        mapListener.showMarkerAt(currLocation);
 //        mapListener.moveCameraTo(currLocation);
     }
 
@@ -74,5 +74,9 @@ public class MapPresenter {
         mapListener.addCircleAt(latLng);
         mapListener.moveCameraTo(latLng);
         mapListener.zoomCamera(14f);
+    }
+
+    public void onSearchClicked() {
+        mapListener.startPlacesSearchActivity();
     }
 }

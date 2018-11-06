@@ -26,4 +26,6 @@ interface MapListener {
     void clearFences();
 
     void zoomCamera(float v);
+
+    void startPlacesSearchActivity();
 }

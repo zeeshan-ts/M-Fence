@@ -206,6 +206,9 @@ public class MapActivity extends AppCompatActivity implements MapListener,
             case R.id.mi_clear_fence:
                 mapPresenter.onClearFenceClicked();
                 break;
+            case R.id.mi_search:
+                mapPresenter.onSearchClicked();
+                break;
         }
         return super.onOptionsItemSelected(item);
     }
@@ -224,10 +227,11 @@ public class MapActivity extends AppCompatActivity implements MapListener,
         mapPresenter.onMapReady(googleMap);
         this.googleMap = googleMap;
 
-        setMapListeners(this.googleMap);
+        setMap(this.googleMap);
     }
 
-    private void setMapListeners(GoogleMap googleMap) {
+    @SuppressLint("MissingPermission")
+    private void setMap(GoogleMap googleMap) {
         googleMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
             @Override
             public void onMapClick(LatLng latLng) {
@@ -241,6 +245,10 @@ public class MapActivity extends AppCompatActivity implements MapListener,
                 Log.i(TAG, "circle clicked");
             }
         });
+
+        if (hasLocationPermissions()) {
+            googleMap.setMyLocationEnabled(true);
+        }
     }
 
     private PendingIntent getGeoFencePendingIntent() {
@@ -367,6 +375,11 @@ public class MapActivity extends AppCompatActivity implements MapListener,
     @Override
     public void zoomCamera(float v) {
         googleMap.animateCamera(CameraUpdateFactory.zoomTo(v));
+    }
+
+    @Override
+    public void startPlacesSearchActivity() {
+//        new PlaceAu
     }
 
     @Override

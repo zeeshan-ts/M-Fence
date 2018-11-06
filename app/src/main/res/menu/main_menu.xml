@@ -2,6 +2,12 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
+    <item android:id="@+id/mi_search"
+        android:title="Search Places"
+        app:showAsAction="always"
+        android:icon="@drawable/ic_search_grayish_yellow_24dp"
+        />
+
     <item
         android:id="@+id/mi_clear_fence"
         android:icon="@drawable/ic_delete_sweep_grayish_yellow_24dp"
